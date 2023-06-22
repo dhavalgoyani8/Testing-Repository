@@ -1,20 +1,20 @@
 import {
   ADD_TODO,
-  ALL_DELETE,
   CHECK_TODO,
+  CLEAR_COMPLETE,
   COMPLETE,
-  COMPLETE_ALL_DELETE,
   DELETE_TODO,
+  DELETE_ALL,
   EDIT_TODO,
   PENDING,
-  SELECT_ALL,
-  SHOW_All,
+  SHOW_ALL,
+  CHECK_UNCHECK,
 } from "./actionType";
 
-export const addTodo = (inputValue) => {
+export const addTodo = (inputTodo) => {
   return {
     type: ADD_TODO,
-    payload: inputValue,
+    payload: inputTodo,
   };
 };
 
@@ -25,6 +25,13 @@ export const deleteTodo = (id) => {
   };
 };
 
+export const editTodo = (updateValue, updateId) => {
+  return {
+    type: EDIT_TODO,
+    payload: { value: updateValue, id: updateId },
+  };
+};
+
 export const checkTodo = (id) => {
   return {
     type: CHECK_TODO,
@@ -32,45 +39,38 @@ export const checkTodo = (id) => {
   };
 };
 
-export const editTodo = (updateValue, updateId) => {
-  return {
-    type: EDIT_TODO,
-    payload: { updateValue: updateValue, updateId: updateId },
-  };
-};
-
 export const showAllTodo = () => {
   return {
-    type: SHOW_All,
+    type: SHOW_ALL,
   };
 };
 
-export const PendingTodo = () => {
+export const pendingTodo = () => {
   return {
     type: PENDING,
   };
 };
 
-export const CompleteTodo = () => {
+export const completeTodo = () => {
   return {
     type: COMPLETE,
   };
 };
 
-export const CompleteAllDeleteTodo = () => {
+export const clearComplete = () => {
   return {
-    type: COMPLETE_ALL_DELETE,
+    type: CLEAR_COMPLETE,
   };
 };
 
-export const allDeleteTodo = () => {
+export const deleteAll = () => {
   return {
-    type: ALL_DELETE,
+    type: DELETE_ALL,
   };
 };
 
-export const SelectAllTodo = () => {
+export const checkUncheck = () => {
   return {
-    type: SELECT_ALL,
+    type: CHECK_UNCHECK,
   };
 };

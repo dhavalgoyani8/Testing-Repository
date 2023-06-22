@@ -1,25 +1,24 @@
 import {
   ADD_TODO,
-  ALL_DELETE,
   CHECK_TODO,
+  CHECK_UNCHECK,
+  CLEAR_COMPLETE,
   COMPLETE,
-  COMPLETE_ALL_DELETE,
+  DELETE_ALL,
   DELETE_TODO,
   EDIT_TODO,
   PENDING,
-  SELECT_ALL,
-  SHOW_All,
+  SHOW_ALL,
 } from "../actions/actionType";
 
-const initialState = { todoList: [], display: "" };
-
+const initialState = { todoList: [], display: "SHOW_ALL" };
 export const todoReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_TODO: {
-      let add = {
+      const add = {
         id: Date.now(),
-        task: action.payload,
-        isComplete: false,
+        todo: action.payload,
+        complete: false,
       };
       return {
         ...state,
@@ -27,42 +26,10 @@ export const todoReducer = (state = initialState, action) => {
       };
     }
 
-    case DELETE_TODO: {
-      let del = state.todoList.filter((e) => action.payload !== e.id);
-      return {
-        ...state,
-        todoList: del,
-      };
-    }
-
     case CHECK_TODO: {
-      let check = state.todoList.map((e) => {
+      const edit = state.todoList.map((e) => {
         if (action.payload === e.id) {
-          return {
-            ...e,
-            isComplete: !e.isComplete,
-          };
-        }
-        return e;
-      });
-      return {
-        ...state,
-        todoList: check,
-      };
-    }
-
-    case ALL_DELETE: {
-      return {
-        ...state,
-        todoList: [],
-      };
-    }
-
-    case EDIT_TODO: {
-      console.log(action);
-      let edit = state.todoList.map((e) => {
-        if (action.payload.updateId === e.id) {
-          return { ...e, task: action.payload.updateValue };
+          return { ...e, complete: !e.complete };
         }
         return e;
       });
@@ -72,17 +39,61 @@ export const todoReducer = (state = initialState, action) => {
       };
     }
 
-    case COMPLETE_ALL_DELETE: {
+    case DELETE_TODO: {
+      const del = state.todoList.filter((e) => {
+        return action.payload !== e.id;
+      });
       return {
         ...state,
-        todoList: state.todoList.filter((e) => !e.isComplete),
+        todoList: del,
       };
     }
 
-    case SHOW_All: {
+    case EDIT_TODO: {
+      const edit = state.todoList.map((e) => {
+        if (action.payload.id === e.id) {
+          return { ...e, todo: action.payload.value };
+        }
+        return e;
+      });
       return {
         ...state,
-        display: SHOW_All,
+        todoList: edit,
+      };
+    }
+
+    case CLEAR_COMPLETE: {
+      return {
+        ...state,
+        todoList: state.todoList.filter((e) => e.complete),
+      };
+    }
+
+    case CHECK_UNCHECK: {
+      let check = state.todoList.map((e) => {
+        if (state.todoList.some((e) => e.complete)) {
+          return { ...e, complete: false };
+        } else {
+          return { ...e, complete: true };
+        }
+      });
+      return {
+        ...state,
+        todoList: check,
+      };
+    }
+
+    case DELETE_ALL: {
+      return {
+        ...state,
+        todoList: [],
+      };
+    }
+
+    case SHOW_ALL: {
+      return {
+        ...state,
+        display: SHOW_ALL,
       };
     }
 
@@ -100,22 +111,7 @@ export const todoReducer = (state = initialState, action) => {
       };
     }
 
-    case SELECT_ALL: {
-      let t = state.todoList.map((e) => {
-        if (state.todoList.some((e) => e.isComplete === true)) {
-          return { ...e, isComplete: false };
-        } else {
-          return { ...e, isComplete: true };
-        }
-      });
-      return {
-        ...state,
-        todoList: t,
-      };
-    }
-
-    default: {
+    default:
       return state;
-    }
   }
 };
